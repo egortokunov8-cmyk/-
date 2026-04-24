@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Бойцовский клуб | Твоя ячейка</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0c10;
+            font-family: 'Segoe UI', 'Poppins', 'Impact', sans-serif;
+            color: #e3ded8;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/concrete-wall.png');
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #020202 0%, #1c1210 100%);
+            padding: 2rem 2rem 1.2rem;
+            text-align: center;
+            border-bottom: 3px solid #c0392b;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.7);
+        }
+        .hero h1 {
+            font-size: 3rem;
+            letter-spacing: 4px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #f5f0e6;
+            text-shadow: 0 0 5px #b52b1e;
+        }
+        .hero h1 i {
+            color: #c03b2b;
+            margin-right: 12px;
+        }
+        .address {
+            background: #111;
+            padding: 0.6rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #c97e5a;
+            text-align: center;
+            border-bottom: 1px solid #2e1c1c;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.8rem;
+        }
+
+        /* Твоя персона (главная фишка) */
+        .my-profile {
+            background: #0f111ae6;
+            border-radius: 36px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid #c55a2e;
+            box-shadow: 0 0 15px rgba(197, 90, 46, 0.4);
+        }
+        .my-profile h2 {
+            font-size: 1.8rem;
+            color: #e68a4a;
+            border-left: 5px solid #c0392b;
+            padding-left: 18px;
+            margin-bottom: 1rem;
+        }
+        .profile-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+        .profile-form input {
+            background: #20252e;
+            border: 1px solid #ac5c3a;
+            padding: 10px 18px;
+            border-radius: 60px;
+            color: white;
+            font-size: 1rem;
+            flex: 2;
+            min-width: 200px;
+        }
+        .profile-form button {
+            background: #9b3c2a;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 60px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .profile-info {
+            margin-top: 1rem;
+            background: #00000066;
+            padding: 1rem;
+            border-radius: 28px;
+        }
+        .badge-member {
+            background: #1d6b2e;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+        }
+        .badge-nonmember {
+            background: #5e2a2a;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 30px;
+        }
+
+        /* Тарифы */
+        .tariffs, .workouts-section, .clients-db {
+            background: #0d0f14e6;
+            border-radius: 36px;
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            border: 1px solid #2c2622;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            border-left: 6px solid #c0392b;
+            padding-left: 20px;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            color: #e7bc92;
+        }
+        .tariff-grid, .workout-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 2rem;
+        }
+        .tariff-card, .workout-card {
+            background: #0e131b;
+            border-radius: 28px;
+            padding: 1.2rem;
+            transition: 0.2s;
+            border-left: 4px solid #c4512e;
+        }
+        .tariff-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #dd8844;
+        }
+        .trainer-info {
+            margin: 10px 0;
+            background: #00000040;
+            padding: 8px;
+            border-radius: 20px;
+        }
+        .price {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #f57c3a;
+        }
+        .sale {
+            background: #942d1f;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            margin-top: 8px;
+        }
+        .btn-buy-workout, .btn-primary {
+            background: #9b3c2a;
+            width: 100%;
+            border: none;
+            padding: 10px;
+            border-radius: 40px;
+            font-weight: bold;
+            color: white;
+            margin-top: 12px;
+            cursor: pointer;
+        }
+        .clients-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .client-list {
+            flex: 1;
+            background: #0e141cb3;
+            border-radius: 28px;
+            padding: 1rem;
+        }
+        .client-entry {
+            background: #111a24;
+            margin-bottom: 0.8rem;
+            padding: 0.8rem;
+            border-radius: 20px;
+        }
+        .client-name {
+            font-weight: bold;
+        }
+        .btn-membership {
+            background: #c44b2b;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 30px;
+            margin-top: 6px;
+            cursor: pointer;
+            color: white;
+        }
+        .reset-btn {
+            background: #2a1c18;
+            border: 1px solid #a5452a;
+            color: #f0c6a2;
+            padding: 8px 20px;
+            border-radius: 40px;
+            margin-top: 1rem;
+            cursor: pointer;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top:0; left:0;
+            width:100%; height:100%;
+            background: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .modal-content {
+            background: #141c26;
+            max-width: 450px;
+            width: 90%;
+            border-radius: 36px;
+            padding: 2rem;
+        }
+        select, .modal-btn {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 60px;
+            background: #202a34;
+            color: white;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.7rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1><i class="fas fa-fist-raised"></i> FIGHT CLUB</h1>
+    <p>Правило №1 — Никому не рассказывать. Правило №2 — Ты должен купить абонемент лично.</p>
+</div>
+<div class="address">
+    <i class="fas fa-location-dot"></i> 420 Paper Street, Wilmington, DE 19801 | ☎ +1 (302) 555-0199 | Подвал, красная дверь
+</div>
+
+<div class="container">
+    <!-- ТВОЙ ПРОФИЛЬ (ты лично) -->
+    <div class="my-profile">
+        <h2><i class="fas fa-user-secret"></i> Твоя ячейка</h2>
+        <div class="profile-form">
+            <input type="text" id="myNameInput" placeholder="Введи своё бойцовское имя" value="Боец">
+            <button id="saveMyProfileBtn"><i class="fas fa-id-card"></i> Стать членом клуба (купить абонемент)</button>
+        </div>
+        <div id="myProfileInfo" class="profile-info">
+            ⚠️ Введи имя и нажми "Стать членом клуба", чтобы получить абонемент и покупать тренировки.
+        </div>
+    </div>
+
+    <!-- ТАРИФЫ С ТРЕНЕРАМИ -->
+    <div class="tariffs">
+        <div class="section-title"><i class="fas fa-tags"></i> Тарифы и Наставники</div>
+        <div class="tariff-grid" id="tariffsContainer"></div>
+    </div>
+
+    <!-- 4 ТРЕНИРОВКИ -->
+    <div class="workouts-section">
+        <div class="section-title"><i class="fas fa-dumbbell"></i> Купить тренировку (для членов клуба)</div>
+        <div class="workout-grid" id="workoutsList"></div>
+    </div>
+
+    <!-- БАЗА ДАННЫХ (5 предустановленных + ты) -->
+    <div class="clients-db">
+        <div class="section-title"><i class="fas fa-users"></i> База данных клуба</div>
+        <div class="clients-row" id="clientsPanel"></div>
+        <button id="resetDatabase" class="reset-btn"><i class="fas fa-skull"></i> Сбросить базу (5 стандартных + удалить меня)</button>
+    </div>
+</div>
+
+<footer>Вspired by Fight Club | Ты — не твоя работа, ты — не банковский счёт. Ты — боец.</footer>
+
+<div id="purchaseModal" class="modal">
+    <div class="modal-content">
+        <h3><i class="fas fa-ticket-alt"></i> Выбрать клиента для тренировки</h3>
+        <p id="modalWorkoutName" style="color:#e28742;"></p>
+        <select id="clientSelectModal"></select>
+        <button id="confirmPurchaseBtn" class="modal-btn">Купить тренировку</button>
+        <button id="closeModalBtn" class="modal-btn" style="background:#3a2a24;">Отмена</button>
+    </div>
+</div>
+
+<script>
+    // ---------- ТАРИФЫ (статичные) ----------
+    const tariffs = [
+        { name: "Уличный боец", price: "3900 ₽/мес", trainer: "Тайлер Дёрден", phone: "+1 (555) 724-1892", action: "🔥 Первый бой в подарок" },
+        { name: "Мясник", price: "5900 ₽/мес", trainer: "Марла Сингер", phone: "+1 (555) 983-4512", action: "🧼 Скидка 20% на мыло" },
+        { name: "Проект 'Майхем'", price: "8900 ₽/мес", trainer: "Роберт Полсон", phone: "+1 (555) 347-0085", action: "💣 Бесплатный бинт" }
+    ];
+
+    // 4 тренировки
+    const workoutsCatalog = [
+        { id: "w1", name: "Уличный бокс", desc: "Работа на мешках, защита, взрывная серия", price: "1100 ₽", icon: "fas fa-fist-raised" },
+        { id: "w2", name: "ММА / Грэпплинг", desc: "Борьба, партер, болевые приёмы", price: "1400 ₽", icon: "fas fa-hand-fist" },
+        { id: "w3", name: "Муай Тай", desc: "Колени, локти — искусство 8 конечностей", price: "1250 ₽", icon: "fas fa-user-ninja" },
+        { id: "w4", name: "Кроссфит-уничтожение", desc: "Функционалка до отказа", price: "950 ₽", icon: "fas fa-bolt" }
+    ];
+
+    // ГЛОБАЛЬНАЯ БАЗА ДАННЫХ (массив клиентов)
+    let clients = [];
+
+    // Получить стандартных 5 клиентов (как в задании)
+    function getDefaultFive() {
+        return [
+            { id: 1, name: "Тайлер Дёрден-мл.", isMember: true, purchasedWorkouts: ["Уличный бокс"] },
+            { id: 2, name: "Майк 'Бритва'", isMember: true, purchasedWorkouts: ["ММА / Грэпплинг", "Муай Тай"] },
+            { id: 3, name: "Андрей 'Стич'", isMember: false, purchasedWorkouts: [] },
+            { id: 4, name: "Елена 'Кулак'", isMember: false, purchasedWorkouts: [] },
+            { id: 5, name: "Виктор 'Угрюмый'", isMember: false, purchasedWorkouts: [] }
+        ];
+    }
+
+    // Загрузка/сохранение (localStorage)
+    function saveToLocal() {
+        localStorage.setItem("fightClubDB_v2", JSON.stringify(clients));
+    }
+
+    function loadFromLocal() {
+        const saved = localStorage.getItem("fightClubDB_v2");
+        if (saved) {
+            try {
+                clients = JSON.parse(saved);
+                clients.forEach(c => { if (!c.purchasedWorkouts) c.purchasedWorkouts = []; });
+            } catch(e) { clients = getDefaultFive(); }
+        } else {
+            clients = getDefaultFive();
+        }
+        // Убедимся, что нет дублирующегося пользователя "Я" с id 999 (если был)
+        // и проверим, существует ли профиль текущего пользователя? будем хранить отдельно в переменной
+    }
+
+    // Сохраняем ID текущего пользователя (если он создал профиль)
+    let currentUserId = null;
+
+    // Обновляем отображение твоего профиля
+    function updateMyProfileUI() {
+        const container = document.getElementById("myProfileInfo");
+        if (currentUserId !== null) {
+            const me = clients.find(c => c.id === currentUserId);
+            if (me) {
+                container.innerHTML = `
+                    <div><i class="fas fa-user"></i> <strong>${me.name}</strong> 
+                    ${me.isMember ? '<span class="badge-member"><i class="fas fa-check-circle"></i> Абонемент активен</span>' : '<span class="badge-nonmember"><i class="fas fa-hourglass"></i> Нет абонемента</span>'}
+                    </div>
+                    <div><i class="fas fa-ticket"></i> Твои тренировки: ${me.purchasedWorkouts.length ? me.purchasedWorkouts.join(", ") : "—"}</div>
+                    ${!me.isMember ? '<button id="buyMembershipForMeBtn" class="btn-primary" style="margin-top:10px; width:auto; padding:6px 20px;">💪 Купить абонемент сейчас</button>' : ''}
+                `;
+                const buyBtn = document.getElementById("buyMembershipForMeBtn");
+                if (buyBtn) buyBtn.onclick = () => buyMembershipForCurrentUser();
+                return;
+            }
+        }
+        // если профиля нет
+        container.innerHTML = `⚠️ Введи имя и нажми «Стать членом клуба», чтобы купить абонемент и покупать тренировки под своим именем.`;
+    }
+
+    // Функция покупки абонемента для текущего пользователя
+    function buyMembershipForCurrentUser() {
+        if (currentUserId === null) {
+            alert("Сначала создай профиль: введи имя и нажми 'Стать членом клуба'.");
+            return;
+        }
+        const me = clients.find(c => c.id === currentUserId);
+        if (me && !me.isMember) {
+            me.isMember = true;
+            saveToLocal();
+            updateMyProfileUI();
+            renderClientsList(); // обновить общую БД
+            alert(`🥊 Поздравляю, ${me.name}! Теперь ты член Бойцовского клуба. Можешь покупать тренировки.`);
+        } else if (me && me.isMember) {
+            alert("У тебя уже есть абонемент, боец!");
+        }
+    }
+
+    // Создать или обновить профиль "Я"
+    function createOrUpdateMyProfile(userName) {
+        if (!userName.trim()) {
+            alert("Введи имя!");
+            return;
+        }
+        // Проверим, есть ли уже профиль с таким именем? но нам нужен отдельный
+        if (currentUserId !== null) {
+            // обновим имя существующего
+            const me = clients.find(c => c.id === currentUserId);
+            if (me) {
+                me.name = userName.trim();
+                saveToLocal();
+                updateMyProfileUI();
+                renderClientsList();
+                alert(`Имя обновлено на "${me.name}"`);
+            } else {
+                // ошибочный кейс: создадим заново
+                createNewUserProfile(userName);
+            }
+        } else {
+            createNewUserProfile(userName);
+        }
+    }
+
+    function createNewUserProfile(userName) {
+        // ищем максимальный id
+        const maxId = clients.length > 0 ? Math.max(...clients.map(c => c.id)) : 5;
+        const newId = maxId + 1;
+        const newUser = {
+            id: newId,
+            name: userName.trim(),
+            isMember: false,
+            purchasedWorkouts: []
+        };
+        clients.push(newUser);
+        currentUserId = newId;
+        saveToLocal();
+        updateMyProfileUI();
+        renderClientsList();
+        alert(`✅ Профиль "${userName}" создан! Теперь можешь купить абонемент (кнопка ниже) и тренировки.`);
+    }
+
+    // Покупка тренировки (для любого члена клуба)
+    function openBuyWorkoutModal(workoutName) {
+        const members = clients.filter(c => c.isMember === true);
+        if (members.length === 0) {
+            alert("Нет активных членов клуба. Сначала кто-то должен купить абонемент (например, ты).");
+            return;
+        }
+        const select = document.getElementById("clientSelectModal");
+        select.innerHTML = "";
+        members.forEach(m => {
+            const option = document.createElement("option");
+            option.value = m.id;
+            option.textContent = `${m.name} (тренировки: ${m.purchasedWorkouts.length ? m.purchasedWorkouts.join(", ") : "—"})`;
+            select.appendChild(option);
+        });
+        document.getElementById("modalWorkoutName").innerText = `Тренировка: ${workoutName}`;
+        window.selectedWorkout = workoutName;
+        document.getElementById("purchaseModal").style.display = "flex";
+    }
+
+    function confirmPurchase() {
+        const select = document.getElementById("clientSelectModal");
+        const clientId = parseInt(select.value);
+        const workout = window.selectedWorkout;
+        if (!workout) return;
+        const client = clients.find(c => c.id === clientId);
+        if (client && client.isMember) {
+            if (!client.purchasedWorkouts.includes(workout)) {
+                client.purchasedWorkouts.push(workout);
+                saveToLocal();
+                renderClientsList();
+                updateMyProfileUI();
+                alert(`✅ ${client.name} приобрёл тренировку "${workout}"! Ударная мощь растёт.`);
+            } else {
+                alert(`❌ ${client.name} уже имеет эту тренировку.`);
+            }
+        } else {
+            alert("Клиент без абонемента не может покупать тренировки.");
+        }
+        closeModal();
+    }
+
+    function closeModal() {
+        document.getElementById("purchaseModal").style.display = "none";
+        window.selectedWorkout = null;
+    }
+
+    // Рендер тарифов
+    function renderTariffs() {
+        const container = document.getElementById("tariffsContainer");
+        container.innerHTML = tariffs.map(t => `
+            <div class="tariff-card">
+                <div class="tariff-name">${t.name}</div>
+                <div class="trainer-info"><i class="fas fa-chalkboard-user"></i> Тренер: ${t.trainer}<br><small>${t.phone}</small></div>
+                <div class="price">${t.price}</div>
+                <div class="sale">🎯 ${t.action}</div>
+            </div>
+        `).join("");
+    }
+
+    // Рендер тренировок
+    function renderWorkouts() {
+        const container = document.getElementById("workoutsList");
+        container.innerHTML = workoutsCatalog.map(w => `
+            <div class="workout-card">
+                <div class="workout-icon" style="font-size:2rem; text-align:center;"><i class="${w.icon}"></i></div>
+                <div class="workout-info" style="padding:0.5rem;">
+                    <h3>${w.name}</h3>
+                    <p style="font-size:0.8rem;">${w.desc}</p>
+                    <div class="price">${w.price}</div>
+                    <button class="btn-buy-workout" data-workout="${w.name}">Купить тренировку</button>
+                </div>
+            </div>
+        `).join("");
+        document.querySelectorAll(".btn-buy-workout").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const workoutName = btn.getAttribute("data-workout");
+                openBuyWorkoutModal(workoutName);
+            });
+        });
+    }
+
+    // Рендер всей базы клиентов (5 стандартных + текущий пользователь)
+    function renderClientsList() {
+        const container = document.getElementById("clientsPanel");
+        const members = clients.filter(c => c.isMember);
+        const nonMembers = clients.filter(c => !c.isMember);
+        const membersHtml = `
+            <div class="client-list">
+                <h3><i class="fas fa-shield-alt"></i> Члены клуба (абонемент есть) — ${members.length}</h3>
+                ${members.map(c => `
+                    <div class="client-entry">
+                        <div class="client-name"><i class="fas fa-user"></i> ${c.name} ${c.id === currentUserId ? '(Ты)' : ''}</div>
+                        <div class="trainings-bought">🥊 Тренировки: ${c.purchasedWorkouts.length ? c.purchasedWorkouts.join(", ") : "—"}</div>
+                    </div>
+                `).join("")}
+            </div>
+        `;
+        const nonMembersHtml = `
+            <div class="client-list">
+                <h3><i class="fas fa-hourglass-half"></i> Без абонемента — ${nonMembers.length}</h3>
+                ${nonMembers.map(c => `
+                    <div class="client-entry">
+                        <div class="client-name"><i class="fas fa-user-slash"></i> ${c.name} ${c.id === currentUserId ? '(Ты)' : ''}</div>
+                        <button class="btn-membership" data-id="${c.id}">Купить абонемент</button>
+                        <div class="trainings-bought">📋 тренировок: ${c.purchasedWorkouts.length}</div>
+                    </div>
+                `).join("")}
+            </div>
+        `;
+        container.innerHTML = membersHtml + nonMembersHtml;
+        document.querySelectorAll(".btn-membership").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const id = parseInt(btn.getAttribute("data-id"));
+                const client = clients.find(c => c.id === id);
+                if (client && !client.isMember) {
+                    client.isMember = true;
+                    saveToLocal();
+                    renderClientsList();
+                    updateMyProfileUI();
+                    alert(`${client.name} теперь с абонементом!`);
+                } else {
+                    alert("Уже есть абонемент.");
+                }
+            });
+        });
+    }
+
+    function resetDatabase() {
+        clients = getDefaultFive();
+        // удаляем данные текущего пользователя
+        currentUserId = null;
+        saveToLocal();
+        renderClientsList();
+        updateMyProfileUI();
+        alert("База сброшена до 5 стандартных клиентов. Твой профиль удалён, создай заново.");
+    }
+
+    // Инициализация
+    loadFromLocal();
+    // Проверим, нет ли сохранённого currentUserId в localStorage? добавим
+    const savedUserId = localStorage.getItem("fightClub_currentUserId");
+    if (savedUserId) {
+        const uid = parseInt(savedUserId);
+        if (clients.some(c => c.id === uid)) {
+            currentUserId = uid;
+        }
+    }
+    renderTariffs();
+    renderWorkouts();
+    renderClientsList();
+    updateMyProfileUI();
+
+    // События
+    document.getElementById("saveMyProfileBtn").onclick = () => {
+        const name = document.getElementById("myNameInput").value;
+        createOrUpdateMyProfile(name);
+        localStorage.setItem("fightClub_currentUserId", currentUserId);
+    };
+    document.getElementById("confirmPurchaseBtn").onclick = confirmPurchase;
+    document.getElementById("closeModalBtn").onclick = closeModal;
+    document.getElementById("resetDatabase").onclick = resetDatabase;
+    window.onclick = (e) => {
+        const modal = document.getElementById("purchaseModal");
+        if (e.target === modal) closeModal();
+    };
+</script>
+</body>
+</html>

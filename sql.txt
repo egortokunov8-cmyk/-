@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS `clients` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NOT NULL,
+  `is_member` TINYINT(1) NOT NULL DEFAULT 0,
+  `purchased_workouts` TEXT DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `clients` (`id`, `name`, `is_member`, `purchased_workouts`) VALUES
+(1, 'Тайлер Дёрден-мл.', 1, '["Уличный бокс"]'),
+(2, 'Майк \'Бритва\'', 1, '["ММА / Грэпплинг","Муай Тай"]'),
+(3, 'Андрей \'Стич\'', 0, '[]'),
+(4, 'Елена \'Кулак\'', 0, '[]'),
+(5, 'Виктор \'Угрюмый\'', 0, '[]');

@@ -1,0 +1,81 @@
+<?php
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST');
+header('Access-Control-Allow-Headers: Content-Type');
+
+$host = 'localhost';
+$db   = '0995084-1-beget';      // Имя базы (у тебя на скрине 0995084-1-beget)
+$user = '0995084-1-beget';      // Имя пользователя (то же самое)
+$pass = 'ТВОЙ_ПАРОЛЬ_ОТ_БД';    // schizokai1000-7
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    die(json_encode(['error' => 'Ошибка: ' . $conn->connect_error]));
+}
+
+$method = $_SERVER['REQUEST_METHOD'];
+$action = $_GET['action'] ?? '';
+
+// Получить всех клиентов
+if ($method === 'GET' && $action === 'getClients') {
+    $result = $conn->query("SELECT * FROM clients ORDER BY id");
+    $clients = [];
+    while ($row = $result->fetch_assoc()) {
+        $row['purchased_workouts'] = json_decode($row['purchased_workouts'], true) ?? [];
+        $row['isMember'] = (bool)$row['is_member'];
+        unset($row['is_member']);
+        $clients[] = $row;
+    }
+    echo json_encode($clients);
+    exit;
+}
+
+// Купить абонемент
+if ($method === 'POST' && $action === 'buyMembership') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $id = (int)$data['id'];
+    $stmt = $conn->prepare("UPDATE clients SET is_member = 1 WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    echo json_encode(['success' => true]);
+    exit;
+}
+
+// Купить тренировку
+if ($method === 'POST' && $action === 'buyWorkout') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $id = (int)$data['id'];
+    $workoutName = $data['workoutName'];
+    $res = $conn->query("SELECT purchased_workouts FROM clients WHERE id = $id");
+    $row = $res->fetch_assoc();
+    $workouts = json_decode($row['purchased_workouts'], true) ?? [];
+    if (!in_array($workoutName, $workouts)) {
+        $workouts[] = $workoutName;
+        $newJson = json_encode($workouts);
+        $stmt = $conn->prepare("UPDATE clients SET purchased_workouts = ? WHERE id = ?");
+        $stmt->bind_param("si", $newJson, $id);
+        $stmt->execute();
+    }
+    echo json_encode(['success' => true]);
+    exit;
+}
+
+// Сброс базы
+if ($method === 'POST' && $action === 'reset') {
+    $conn->query("DELETE FROM clients WHERE id > 5");
+    $conn->query("UPDATE clients SET is_member = (CASE WHEN id IN (1,2) THEN 1 ELSE 0 END), purchased_workouts = (CASE id WHEN 1 THEN '[\"Уличный бокс\"]' WHEN 2 THEN '[\"ММА / Грэпплинг\",\"Муай Тай\"]' ELSE '[]' END)");
+    echo json_encode(['success' => true]);
+    exit;
+}
+
+// Создать нового пользователя (ты)
+if ($method === 'POST' && $action === 'createUser') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $name = $conn->real_escape_string($data['name']);
+    $stmt = $conn->prepare("INSERT INTO clients (name, is_member, purchased_workouts) VALUES (?, 0, '[]')");
+    $stmt->bind_param("s", $name);
+    $stmt->execute();
+    $newId = $conn->insert_id;
+    echo json_encode(['id' => $newId, 'name' => $name]);
+    exit;
+}
